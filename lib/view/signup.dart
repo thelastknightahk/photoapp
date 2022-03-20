@@ -34,7 +34,7 @@ class _SignUpPageState extends State<SignUpPage> {
               Container(
                 margin: EdgeInsets.all(10.0),
                 child: TextFormField(
-                  onChanged: ((value) => {userEmail = value}),
+                  onChanged: ((val) => {userEmail = val}),
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
                     labelText: 'Email',
@@ -92,6 +92,7 @@ class _SignUpPageState extends State<SignUpPage> {
               ),
               InkWell(
                 onTap: () {
+                  // print("Email and Password $userEmail $userPassword ");
                   saveData(userEmail, userPassword);
                 },
                 child: Container(
@@ -150,7 +151,10 @@ class _SignUpPageState extends State<SignUpPage> {
         PersonList(email: "${userEmail}", password: "${userPassword}");
     box
         .add(personList)
-        .then((value) => {print("Save Data")})
+        .then((value) => {
+              print("Save Data ${userEmail} ${userPassword}"),
+              Navigator.pushReplacementNamed(context, '/signIn')
+            })
         .catchError((e) => {print("Same Data")});
   }
 }

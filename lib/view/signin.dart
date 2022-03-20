@@ -19,7 +19,7 @@ class _SignInPageState extends State<SignInPage> {
   Widget build(BuildContext context) {
     double fullWidth = MediaQuery.of(context).size.width;
     double fullHeight = MediaQuery.of(context).size.height;
-    var userEmail,userPassword;
+    var userEmail, userPassword;
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: Container(
@@ -34,9 +34,9 @@ class _SignInPageState extends State<SignInPage> {
               Container(
                 margin: EdgeInsets.all(10.0),
                 child: TextFormField(
-                  onChanged: (val){
+                  onChanged: (val) {
                     userEmail = val;
-                  } ,
+                  },
                   decoration: InputDecoration(
                     labelText: 'Email',
                     fillColor: mainColor,
@@ -63,14 +63,13 @@ class _SignInPageState extends State<SignInPage> {
               Container(
                 margin: EdgeInsets.all(10.0),
                 child: TextFormField(
-                  onChanged: (val){
+                  onChanged: (val) {
                     userPassword = val;
-                  } ,
+                  },
                   decoration: InputDecoration(
                     labelText: 'Password',
                     fillColor: mainColor,
                     filled: true,
-                    
                     labelStyle: TextStyle(color: purpleColor),
                     enabledBorder: new OutlineInputBorder(
                       borderRadius: new BorderRadius.circular(10.0),
@@ -94,7 +93,7 @@ class _SignInPageState extends State<SignInPage> {
                 height: 60.0,
               ),
               InkWell(
-                onTap: (){
+                onTap: () {
                   getUserData(userEmail, userPassword);
                 },
                 child: Container(
@@ -109,7 +108,8 @@ class _SignInPageState extends State<SignInPage> {
                         fontWeight: FontWeight.w600),
                   )),
                   decoration: BoxDecoration(
-                      color: mainColor, borderRadius: BorderRadius.circular(4.0)),
+                      color: mainColor,
+                      borderRadius: BorderRadius.circular(4.0)),
                 ),
               ),
               SizedBox(
@@ -148,15 +148,19 @@ class _SignInPageState extends State<SignInPage> {
     );
   }
 
-   getUserData(var userEmail, var userPassword) async {
-     final Box box = Hive.box('personDb');
-      for (var i = 0; i<  box.length; i++) {
-        PersonList personList = box.getAt(i);
-        if(personList.email == userEmail && personList.password == userPassword){
-          print("That's ok ");
-        }
+  getUserData(var userEmail, var userPassword) async {
+    final Box box = Hive.box('personDb');
+
+    for (var i = 0; i < box.length; i++) {
+      PersonList personList = box.getAt(i);
+      // print(
+      //     "Email & Password ${personList.email} ${personList.password} $userEmail $userPassword  ");
+      if (personList.email!.compareTo(userEmail) == 0 &&
+          personList.password!.compareTo(userPassword) == 0) {
+        // print("That's ok $userEmail $userPassword ");
+        Navigator.pushReplacementNamed(context, '/home');
       }
-      // box.clear();
-      
+    }
+    // box.clear();
   }
 }
