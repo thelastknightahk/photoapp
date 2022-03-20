@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:getittest/domain/models/person.dart';
+import 'package:getittest/domain/models/person_list.dart'; 
 import 'package:getittest/main.dart';
 import 'package:getittest/utils/colors.dart';
 import 'package:getittest/utils/dimen.dart';
@@ -7,6 +7,7 @@ import 'package:getittest/view/signin.dart';
 import 'package:getittest/view/signup.dart';
 import 'package:getittest/widget/auth_button.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 class WelcomePage extends StatefulWidget {
   const WelcomePage({Key? key}) : super(key: key);
@@ -54,7 +55,8 @@ class _WelcomePageState extends State<WelcomePage> {
             right: 20.0,
             child: InkWell(
                 onTap: () {
-                  // Navigator.pushNamed(context, '/signIn');
+                 // saveData();
+                Navigator.pushNamed(context, '/signIn');
                 },
                 child: authButton(context, 'Sign In'))),
         Positioned(
@@ -63,7 +65,8 @@ class _WelcomePageState extends State<WelcomePage> {
             right: 20.0,
             child: InkWell(
                 onTap: () {
-                  Navigator.pushNamed(context, '/signUp');
+                  //getUserData();
+                Navigator.pushNamed(context, '/signUp');
                 },
                 child: authButton(context, 'Sign Up'))),
       ],
@@ -89,12 +92,7 @@ class _WelcomePageState extends State<WelcomePage> {
     );
   }
 
-  saveData() async {
-    // List<Person> personalList = [];
-    // personalList.add(Person(email: "aung@gmail.com", password: "123456"));
+  
 
-    // box.put('UserList', personalList);
-  }
-
-  getUserData() async {}
+ 
 }

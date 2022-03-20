@@ -1,18 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:getittest/domain/models/person_list.dart';
 import 'package:getittest/utils/colors.dart';
 import 'package:getittest/view/signup.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 import '../utils/dimen.dart';
 
-class SignInPage extends StatelessWidget {
+class SignInPage extends StatefulWidget {
   const SignInPage({Key? key}) : super(key: key);
 
+  @override
+  State<SignInPage> createState() => _SignInPageState();
+}
+
+class _SignInPageState extends State<SignInPage> {
   @override
   Widget build(BuildContext context) {
     double fullWidth = MediaQuery.of(context).size.width;
     double fullHeight = MediaQuery.of(context).size.height;
-
+    var userEmail,userPassword;
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: Container(
@@ -27,6 +34,9 @@ class SignInPage extends StatelessWidget {
               Container(
                 margin: EdgeInsets.all(10.0),
                 child: TextFormField(
+                  onChanged: (val){
+                    userEmail = val;
+                  } ,
                   decoration: InputDecoration(
                     labelText: 'Email',
                     fillColor: mainColor,
@@ -53,10 +63,14 @@ class SignInPage extends StatelessWidget {
               Container(
                 margin: EdgeInsets.all(10.0),
                 child: TextFormField(
+                  onChanged: (val){
+                    userPassword = val;
+                  } ,
                   decoration: InputDecoration(
                     labelText: 'Password',
                     fillColor: mainColor,
                     filled: true,
+                    
                     labelStyle: TextStyle(color: purpleColor),
                     enabledBorder: new OutlineInputBorder(
                       borderRadius: new BorderRadius.circular(10.0),
@@ -79,19 +93,24 @@ class SignInPage extends StatelessWidget {
               SizedBox(
                 height: 60.0,
               ),
-              Container(
-                width: 100.0,
-                height: 45.0,
-                child: Center(
-                    child: Text(
-                  "Sign In",
-                  style: TextStyle(
-                      fontSize: REGULAR_FONT,
-                      color: purpleColor,
-                      fontWeight: FontWeight.w600),
-                )),
-                decoration: BoxDecoration(
-                    color: mainColor, borderRadius: BorderRadius.circular(4.0)),
+              InkWell(
+                onTap: (){
+                  getUserData(userEmail, userPassword);
+                },
+                child: Container(
+                  width: 100.0,
+                  height: 45.0,
+                  child: Center(
+                      child: Text(
+                    "Sign In",
+                    style: TextStyle(
+                        fontSize: REGULAR_FONT,
+                        color: purpleColor,
+                        fontWeight: FontWeight.w600),
+                  )),
+                  decoration: BoxDecoration(
+                      color: mainColor, borderRadius: BorderRadius.circular(4.0)),
+                ),
               ),
               SizedBox(
                 height: 20.0,
@@ -127,5 +146,17 @@ class SignInPage extends StatelessWidget {
         return child;
       },
     );
+  }
+
+   getUserData(var userEmail, var userPassword) async {
+     final Box box = Hive.box('personDb');
+      for (var i = 0; i<  box.length; i++) {
+        PersonList personList = box.getAt(i);
+        if(personList.email == userEmail && personList.password == userPassword){
+          print("That's ok ");
+        }
+      }
+      // box.clear();
+      
   }
 }

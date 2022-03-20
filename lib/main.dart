@@ -1,6 +1,5 @@
 import 'dart:io';
-import 'package:flutter/material.dart';
-import 'package:getittest/domain/models/person.dart';
+import 'package:flutter/material.dart'; 
 import 'package:getittest/domain/models/person_list.dart';
 import 'package:getittest/view/home.dart';
 import 'package:getittest/view/signin.dart';
@@ -10,6 +9,13 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+    // Initialize hive
+  await Hive.initFlutter();
+  // Registering the adapter
+  Hive.registerAdapter(PersonListAdapter() );
+  // Opening the box
+  await Hive.openBox('personDb');
 
   runApp(const MyApp());
 }

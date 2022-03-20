@@ -1,17 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:getittest/domain/models/person_list.dart';
 import 'package:getittest/view/signin.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 import '../utils/colors.dart';
 import '../utils/dimen.dart';
 
-class SignUpPage extends StatelessWidget {
+class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);
 
+  @override
+  State<SignUpPage> createState() => _SignUpPageState();
+}
+
+class _SignUpPageState extends State<SignUpPage> {
   @override
   Widget build(BuildContext context) {
     double fullWidth = MediaQuery.of(context).size.width;
     double fullHeight = MediaQuery.of(context).size.height;
+    var userEmail, userPassword;
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: Container(
@@ -26,6 +34,8 @@ class SignUpPage extends StatelessWidget {
               Container(
                 margin: EdgeInsets.all(10.0),
                 child: TextFormField(
+                  onChanged: ((value) => {userEmail = value}),
+                  keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
                     labelText: 'Email',
                     fillColor: mainColor,
@@ -52,6 +62,8 @@ class SignUpPage extends StatelessWidget {
               Container(
                 margin: EdgeInsets.all(10.0),
                 child: TextFormField(
+                  onChanged: ((value) => {userPassword = value}),
+                  obscureText: true,
                   decoration: InputDecoration(
                     labelText: 'Password',
                     fillColor: mainColor,
@@ -78,19 +90,25 @@ class SignUpPage extends StatelessWidget {
               SizedBox(
                 height: 60.0,
               ),
-              Container(
-                width: 100.0,
-                height: 45.0,
-                child: Center(
-                    child: Text(
-                  "Sign Up",
-                  style: TextStyle(
-                      fontSize: REGULAR_FONT,
-                      color: purpleColor,
-                      fontWeight: FontWeight.w600),
-                )),
-                decoration: BoxDecoration(
-                    color: mainColor, borderRadius: BorderRadius.circular(4.0)),
+              InkWell(
+                onTap: () {
+                  saveData(userEmail, userPassword);
+                },
+                child: Container(
+                  width: 100.0,
+                  height: 45.0,
+                  child: Center(
+                      child: Text(
+                    "Sign Up",
+                    style: TextStyle(
+                        fontSize: REGULAR_FONT,
+                        color: purpleColor,
+                        fontWeight: FontWeight.w600),
+                  )),
+                  decoration: BoxDecoration(
+                      color: mainColor,
+                      borderRadius: BorderRadius.circular(4.0)),
+                ),
               ),
               SizedBox(
                 height: 20.0,
@@ -124,5 +142,15 @@ class SignUpPage extends StatelessWidget {
         return child;
       },
     );
+  }
+
+  saveData(var userEmail, var userPassword) async {
+    final Box box = Hive.box('personDb');
+    PersonList personList =
+        PersonList(email: "${userEmail}", password: "${userPassword}");
+    box
+        .add(personList)
+        .then((value) => {print("Save Data")})
+        .catchError((e) => {print("Same Data")});
   }
 }

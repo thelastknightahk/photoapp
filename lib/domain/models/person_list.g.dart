@@ -17,16 +17,19 @@ class PersonListAdapter extends TypeAdapter<PersonList> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return PersonList(
-      personDataList: (fields[0] as List?)?.cast<Person>(),
+      email: fields[0] as String?,
+      password: fields[1] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, PersonList obj) {
     writer
-      ..writeByte(1)
+      ..writeByte(2)
       ..writeByte(0)
-      ..write(obj.personDataList);
+      ..write(obj.email)
+      ..writeByte(1)
+      ..write(obj.password);
   }
 
   @override
